@@ -1,0 +1,41 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build:
+      context: ../Backend
+      dockerfile: ../Backend/Dockerfile
+    container_name: backend
+    restart: always
+    ports:
+      - "4000:4000"
+    env_file:
+      - ../Backend/.env.docker
+    depends_on:
+      - mongodb
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../frontend/Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:80"
+    env_file:
+      - ../frontend/.env.docker
+    depends_on:
+      - backend
+
+volumes:
+  mongodb_data:
