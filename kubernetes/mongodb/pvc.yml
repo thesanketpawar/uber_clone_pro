@@ -6,7 +6,9 @@ metadata:
   namespace: uber
 
 spec:
-  accessModes: 
+  accessModes:
     - ReadWriteOnce
+
   resources:
-    storage: 5Gi
+    requests:
+      storage: 5Gi
