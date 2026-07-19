@@ -6,6 +6,8 @@ metadata:
   namespace: uber
 
 spec:
+  storageClassName: ebs-sc
+
   accessModes:
     - ReadWriteOnce
 
