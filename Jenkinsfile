@@ -5,7 +5,7 @@ pipeline {
         // Docker Hub Credentials & Image Names
         DOCKER_USER  = 'thesanketpawar'
         IMAGE_TAG    = "${BUILD_NUMBER}"
-        DOCKER_CREDS = 'docker-hub-credentials'
+        DOCKER_CREDS = 'docker-cred'
     }
 
     stages {
