@@ -78,7 +78,7 @@ pipeline {
                     echo "Applying Kubernetes manifests and restarting deployments in namespace: ${K8S_NAMESPACE}..."
                     
                     // Apply all manifests in k8s recursively
-                    sh "kubectl apply -f k8s/ -n ${K8S_NAMESPACE}"
+                    sh "kubectl apply -f k8s/ -R -n uber"
 
                     // Trigger zero-downtime rolling updates
                     sh "kubectl rollout restart deployment/backend -n ${K8S_NAMESPACE}"
