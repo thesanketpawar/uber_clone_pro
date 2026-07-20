@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // --- CONFIGURATION ---
-        DOCKER_HUB_CRED_ID = 'dockerhub-cred'   // ID of Docker Hub credentials stored in Jenkins
+        DOCKER_HUB_CRED_ID = 'docker-cred'   // ID of Docker Hub credentials stored in Jenkins
         DOCKER_USER        = 'thesanketpawar'         // Your Docker Hub username
         
         // NodePort backend address accessible by public browsers
