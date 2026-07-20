@@ -5,7 +5,7 @@ pipeline {
         // Docker Hub Credentials & Image Names
         DOCKER_USER  = 'thesanketpawar'
         IMAGE_TAG    = "${BUILD_NUMBER}"
-        DOCKER_CREDS = 'docker-cred' // Matches your Jenkins Credential ID
+        DOCKER_CREDS = 'docker-hub-credentials'
     }
 
     stages {
@@ -28,7 +28,6 @@ pipeline {
                 script {
                     echo "--- Logging into Docker Hub ---"
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDS}", usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                        // Single quotes around shell command prevent password exposure in build logs
                         sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
                         
                         echo "--- Pushing Backend Images ---"
@@ -47,8 +46,8 @@ pipeline {
             steps {
                 script {
                     echo "--- Deploying Manifests to Kubernetes ---"
-                    // Applies all .yaml manifests stored in the k8s directory
-                    sh "kubectl apply -f ./k8s/"
+                    // -R scans inside backend/, frontend/, and mongodb/ subfolders
+                    sh "kubectl apply -R -f ./k8s/"
                 }
             }
         }
