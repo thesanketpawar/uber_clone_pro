@@ -37,7 +37,7 @@ pipeline {
                     steps {
                         script {
                             echo "Building Backend Docker Image..."
-                            // Matches the uppercase 'Backend' directory name
+                            // Matches the exact capital 'Backend' directory
                             dir('Backend') {
                                 sh "docker build -t ${BACKEND_IMAGE} ."
                             }
@@ -50,8 +50,8 @@ pipeline {
                         script {
                             echo "Building Frontend Docker Image with VITE_BASE_URL=${BACKEND_PUBLIC_URL}..."
                             dir('frontend') {
-                                // Points directly to Dockerfile located in src/
-                                sh "docker build -f src/Dockerfile --build-arg VITE_BASE_URL=${BACKEND_PUBLIC_URL} -t ${FRONTEND_IMAGE} ."
+                                // Now builds directly from frontend/ root
+                                sh "docker build --build-arg VITE_BASE_URL=${BACKEND_PUBLIC_URL} -t ${FRONTEND_IMAGE} ."
                             }
                         }
                     }
