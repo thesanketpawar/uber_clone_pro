@@ -3,8 +3,8 @@ import { io } from 'socket.io-client';
 
 export const SocketContext = createContext();
 
-// VITE_BASE_URL (http://13.235.94.86:30090) se connect karega
-const socket = io(import.meta.env.VITE_BASE_URL || 'http://localhost:3000', {
+// import.meta.env.VITE_BASE_URL docker build arg se aayega
+const socket = io(import.meta.env.VITE_BASE_URL || 'http://13.235.94.86:30090', {
     transports: ['websocket', 'polling'],
     withCredentials: true
 });
@@ -12,13 +12,11 @@ const socket = io(import.meta.env.VITE_BASE_URL || 'http://localhost:3000', {
 const SocketProvider = ({ children }) => {
     useEffect(() => {
         socket.on('connect', () => {
-            console.log('Connected to socket server successfully!');
+            console.log('Socket Connected!');
         });
-
         socket.on('connect_error', (err) => {
-            console.error('Socket connection error:', err);
+            console.error('Socket error:', err);
         });
-
         return () => {
             socket.off('connect');
             socket.off('connect_error');
