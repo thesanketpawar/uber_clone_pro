@@ -1,5 +1,3 @@
-CMD ["npm","start"]
-
 FROM node:18-alpine
 
 WORKDIR /app
@@ -10,4 +8,4 @@ RUN npm install --production
 COPY . .
 
 EXPOSE 4000
-CMD ["npm", "start"]
+CMD ["node", "server.js"]  # or "npm", "start" depending on your package.json
