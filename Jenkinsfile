@@ -5,7 +5,7 @@ pipeline {
         // Docker Hub Credentials & Image Names
         DOCKER_USER  = 'thesanketpawar'
         IMAGE_TAG    = "${BUILD_NUMBER}"
-        DOCKER_CREDS = 'docker-hub-credentials' // Matches your Jenkins Credential ID
+        DOCKER_CREDS = 'docker-cred' // Matches your Jenkins Credential ID
     }
 
     stages {
