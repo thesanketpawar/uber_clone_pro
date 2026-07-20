@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // --- CONFIGURATION ---
-        DOCKER_HUB_CRED_ID = 'docker-cred'   // ID of Docker Hub credentials stored in Jenkins
-        DOCKER_USER        = 'thesanketpawar' // Change to your actual Docker Hub username
+        DOCKER_HUB_CRED_ID = 'dockerhub-cred'   // ID of Docker Hub credentials stored in Jenkins
+        DOCKER_USER        = 'thesanketpawar'         // Your Docker Hub username
         
         // NodePort backend address accessible by public browsers
         BACKEND_PUBLIC_URL = 'http://13.235.94.86:30090' 
@@ -37,7 +37,8 @@ pipeline {
                     steps {
                         script {
                             echo "Building Backend Docker Image..."
-                            dir('backend') {
+                            // FIX 1: Point to 'Backend' (Capital B)
+                            dir('Backend') {
                                 sh "docker build -t ${BACKEND_IMAGE} ."
                             }
                         }
@@ -49,8 +50,8 @@ pipeline {
                         script {
                             echo "Building Frontend Docker Image with VITE_BASE_URL=${BACKEND_PUBLIC_URL}..."
                             dir('frontend') {
-                                // CRITICAL: Pass build argument into Vite static build stage
-                                sh "docker build --build-arg VITE_BASE_URL=${BACKEND_PUBLIC_URL} -t ${FRONTEND_IMAGE} ."
+                                // FIX 2: Explicitly point to 'src/Dockerfile'
+                                sh "docker build -f src/Dockerfile --build-arg VITE_BASE_URL=${BACKEND_PUBLIC_URL} -t ${FRONTEND_IMAGE} ."
                             }
                         }
                     }
@@ -76,10 +77,10 @@ pipeline {
                 script {
                     echo "Applying Kubernetes manifests and restarting deployments in namespace: ${K8S_NAMESPACE}..."
                     
-                    // Apply manifests if located in k8s/ directory
+                    // Apply all manifests in k8s recursively
                     sh "kubectl apply -f k8s/ -n ${K8S_NAMESPACE}"
 
-                    // Trigger zero-downtime rolling update
+                    // Trigger zero-downtime rolling updates
                     sh "kubectl rollout restart deployment/backend -n ${K8S_NAMESPACE}"
                     sh "kubectl rollout restart deployment/frontend -n ${K8S_NAMESPACE}"
 
