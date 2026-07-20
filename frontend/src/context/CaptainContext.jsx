@@ -4,26 +4,37 @@ import axios from 'axios';
 
 export const CaptainDataContext = createContext();
 
+// Dynamic URL with fallback to EC2 NodePort
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://13.235.94.86:30090';
+
 const CaptainContext = ({ children }) => {
   const [captain, setCaptain] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchCaptainProfile = async () => {
+    const captainToken = localStorage.getItem("captainToken");
+    
+    // Don't attempt to fetch if no token exists yet
+    if (!captainToken) return;
+
+    setIsLoading(true);
     try {
-      const captainToken = localStorage.getItem("captainToken");
-      const res = await axios.get("http://localhost:4000/captain/captain-profile", {
+      const res = await axios.get(`${BASE_URL}/captain/captain-profile`, {
         headers: {
           Authorization: `Bearer ${captainToken}`,
         },
       });
-  
+
       setCaptain(res.data);
+      setError(null);
     } catch (err) {
       console.error("Failed to fetch captain profile:", err);
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchCaptainProfile();
