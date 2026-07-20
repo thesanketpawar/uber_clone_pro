@@ -3,13 +3,11 @@ kind: Service
 metadata:
   name: backend
   namespace: uber
-
 spec:
-  selector:
-    app: backend
-
+  type: NodePort
   ports:
     - port: 4000
       targetPort: 4000
-
-  type: ClusterIP
+      nodePort: 30090   # Expose backend on port 30090
+  selector:
+    app: backend
