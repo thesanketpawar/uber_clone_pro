@@ -6,7 +6,7 @@ pipeline {
         DOCKER_USER     = 'thesanketpawar'
         IMAGE_NAME      = 'uber_clone_pro'
         IMAGE_TAG       = "${BUILD_NUMBER}" // Uses Jenkins build number as tag
-        DOCKER_CREDS    = 'docker-credentials' // The ID created in Step 2
+        DOCKER_CREDS    = 'docker-cred' // The ID created in Step 2
     }
 
     stages {
